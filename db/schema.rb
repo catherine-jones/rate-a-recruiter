@@ -10,30 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_30_031852) do
+ActiveRecord::Schema.define(version: 2018_05_03_061212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "ratings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "rating"
+    t.integer "score"
     t.text "review"
-    t.uuid "recruiters_id"
-    t.uuid "users_id"
+    t.uuid "recruiter_id", null: false
+    t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["recruiters_id"], name: "index_ratings_on_recruiters_id"
-    t.index ["users_id"], name: "index_ratings_on_users_id"
+    t.index ["recruiter_id"], name: "index_ratings_on_recruiter_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "recruiters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "company_name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "first_name", null: false
+    t.string "last_name", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -44,14 +46,10 @@ ActiveRecord::Schema.define(version: 2018_04_30_031852) do
     t.datetime "last_sign_in_at"
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
-    t.string "first_name"
-    t.string "last_name"
-    t.uuid "ratings_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["ratings_id"], name: "index_users_on_ratings_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "ratings", "recruiters"
+  add_foreign_key "ratings", "users"
 end
