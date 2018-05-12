@@ -56,36 +56,16 @@ Recruiter.create!([{
 
 Rating.destroy_all
 
-users = User.ids;
-recruiters = Recruiter.ids;
-
-Rating.all.each do |rating| i = 0
-  user = users[i]; #get the id in the relevant array position
-  rating.user_id = user; #assign the id to the rating record
-  recruiter = recruiters[i];
-  rating.recruiter_id = recruiter;
-  rating.save
-  i = i + 1;
+# Take each user, and then have them give
+# a random rating for each recruiter.
+# Feel free to change the `all` to be a subset
+# of the collections (eg User.take(3), User.all[0..2] etc)
+User.all.each do |user|
+  Recruiter.all.each do |recruiter|
+    user.ratings.create!({
+      recruiter: recruiter,
+      score: rand(1..10),
+      review: "Armed with the astonishing ability to shrink in scale but increase in strength, con-man Scott Lang must embrace his inner-hero and help his mentor, Dr. Hank Pym, protect the secret behind his spectacular Ant-Man suit from a new generation of towering threats. Against seemingly insurmountable obstacles, Pym and Lang must plan and pull off a heist that will save the world."
+    })
+  end
 end
-
-Rating.create!([{
-  score: 3,
-  review: "Armed with the astonishing ability to shrink in scale but increase in strength, con-man Scott Lang must embrace his inner-hero and help his mentor, Dr. Hank Pym, protect the secret behind his spectacular Ant-Man suit from a new generation of towering threats. Against seemingly insurmountable obstacles, Pym and Lang must plan and pull off a heist that will save the world."
-},
-{
-  score: 9,
-  review: "Armed with the astonishing ability to shrink in scale but increase in strength, con-man Scott Lang must embrace his inner-hero and help his mentor, Dr. Hank Pym, protect the secret behind his spectacular Ant-Man suit from a new generation of towering threats. Against seemingly insurmountable obstacles, Pym and Lang must plan and pull off a heist that will save the world."
-},
-{
-  score: 5,
-  review: "Armed with the astonishing ability to shrink in scale but increase in strength, con-man Scott Lang must embrace his inner-hero and help his mentor, Dr. Hank Pym, protect the secret behind his spectacular Ant-Man suit from a new generation of towering threats. Against seemingly insurmountable obstacles, Pym and Lang must plan and pull off a heist that will save the world."
-},
-{
-  score: 2,
-  review: "Armed with the astonishing ability to shrink in scale but increase in strength, con-man Scott Lang must embrace his inner-hero and help his mentor, Dr. Hank Pym, protect the secret behind his spectacular Ant-Man suit from a new generation of towering threats. Against seemingly insurmountable obstacles, Pym and Lang must plan and pull off a heist that will save the world."
-},
-{
-  score: 8,
-  review: "Armed with the astonishing ability to shrink in scale but increase in strength, con-man Scott Lang must embrace his inner-hero and help his mentor, Dr. Hank Pym, protect the secret behind his spectacular Ant-Man suit from a new generation of towering threats. Against seemingly insurmountable obstacles, Pym and Lang must plan and pull off a heist that will save the world."
-}
-])
